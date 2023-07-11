@@ -1,0 +1,47 @@
+const diceElements = Array.from(document.querySelectorAll('.dice'));
+const scoreElement = document.getElementById('score');
+
+function rollDice(){
+    const rolls = diceElements.map(() => Math.floor(Math.random() * 6)+1);
+    for(let i = 0; i < diceElements.length; i++){
+        diceElements[i].textContent = rolls[i];
+    }
+    const score = calculateScore(rolls);
+    scoreElement.textContent = score;
+    if(score >= 100){
+        alert('Congratulations! You won!');
+        resetGame();
+    } else if(rolls.includes(1)){
+        alert('Oops! You rolled a 1. Game over!');
+        resetGame();
+    }
+}
+function resetGame(){
+    for(const diceElement of diceElements){
+        diceElement.textContent = '';
+    }
+    scoreElement.textContent = '0';
+}
+
+const rollButton = document.getElementById('roll-button');
+rollButton.addEventListener('click',rollDice);
+
+document.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){
+        rollDice();
+    }
+});
+
+function calculateScore(rolls){
+    let score = 0;
+    for(const roll of rolls){
+        if(roll === 1){
+            score += 10;
+        } else if(roll===6){
+            score += 6;
+        } else{
+            score += roll;
+        }
+    }
+    return score;
+}
